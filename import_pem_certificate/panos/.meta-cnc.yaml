@@ -1,0 +1,37 @@
+name: import_pem_certificate
+label: 3D. Import an existing pem certificate
+
+description: |
+  Import certificate to PAN-OS
+
+type: python3
+
+extends:
+
+labels:
+  collection:  
+    - Authentication Policy
+    - X509
+
+variables:
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: ip_address
+  - name: api_key
+    description: API Key
+    default: abc123
+    type_hint: text
+  - name: CERT_NAME
+    description: Certificate Label
+    default: Authentication Portal
+    type_hint: text 
+  - name: CERT_FILE
+    description: Certificate File Name
+    type_hint: text
+
+snippets:
+  - name: import_pem_certificate
+    file: pem_cert_import.py
+
+    

@@ -1,0 +1,48 @@
+name: create_duo_mfa_profile
+label: 4A. Create Duo MFA Server Profile
+
+description: |
+  Import CA certs for Duo service, create cert profile, Duo MFA server profile, and local Auth Profile with MFA
+
+type: python3
+
+extends:
+
+labels:
+  collection:  Authentication Policy
+
+variables:
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: ip_address
+  - name: api_key
+    description: API Key
+    default: abc123
+    type_hint: text
+  - name: mfa_profile_name
+    description: MFA Profile Name (will be created/replaced)
+    default: DUO_MFA_Skillet
+    type_hint: text
+  - name: auth_profile
+    description: Example Local Auth Profile with MFA enabled (will be created/replaced)
+    default: Local Auth DUO MFA
+    type_hint: text
+  - name: duo_endpoint
+    description: Your Duo API Instance
+    default: api-xxx.duosecurity.com
+    type_hint: text
+  - name: duo_integration_key
+    description: Integration Key
+    default: XXXXXXXX
+    type_hint: text
+  - name: duo_secret_key
+    description: Secret Key
+    default: XXXXXX
+    type_hint: password
+
+snippets:
+  - name: configure_duo_mfa
+    file: duo_mfa_config.py
+
+    

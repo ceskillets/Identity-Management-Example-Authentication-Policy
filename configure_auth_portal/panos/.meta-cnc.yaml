@@ -1,0 +1,53 @@
+name: configure_auth_portal
+label: 5. Configure Authentication Portal Settings 
+
+description:
+  Configure Authentication Portal Settings
+
+type: rest
+
+extends:
+
+labels:
+  collection:  
+    - Authentication Policy
+
+variables:
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: ip_address
+  - name: api_key
+    description: API Key
+    default: abc123
+    type_hint: text
+  - name: CERT_HOSTNAME
+    description: Authentication Portal Redirect Hostname
+    default: captive.portal.fqdn
+    type_hint: text
+  - name: ssltls_profile
+    description: SSLTLS Profile for Authentication Portal (must exist)
+    default: Authentication Portal - Skillet
+    type_hint: text
+  - name: auth_profile
+    description: Auth Profile for Captive Portal (must exist)
+    default: Your Auth Profile
+    type_hint: text
+  - name: timeout
+    description: Timeout (Default 60 mins)
+    default: 60
+    type_hint: number
+  - name: idle_timeout
+    description: Idle Timeout (Default 15 minutes)
+    default: 15
+    type_hint: number
+
+snippets:
+  - name: configure_auth_portal
+#    path: https://{{ TARGET_IP }}/api?key={{ api_key }}&type=config&action=set&xpath=/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/captive-portal&element=<captive-portal><redirect-host>{{ CERT_HOSTNAME }}</redirect-host><ssl-tls-service-profile>{{ ssltls_profile }}</ssl-tls-service-profile><mode><redirect/></mode><timer>{{ timeout }}</timer><<idle-timer>{{ idle_timeout }}</idle-timer></captive-portal>
+    path: https://{{ TARGET_IP }}/api?key={{ api_key }}&type=config&action=edit&xpath=/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/captive-portal&element=<captive-portal><timer>{{ timeout }}</timer><idle-timer>{{ idle_timeout }}</idle-timer><redirect-host>{{ CERT_HOSTNAME }}</redirect-host><ssl-tls-service-profile>{{ ssltls_profile }}</ssl-tls-service-profile><mode><redirect/></mode><authentication-profile>{{ auth_profile }}</authentication-profile></captive-portal>
+    output_type: xml
+    outputs:
+      - name: result
+        capture_pattern: result
+

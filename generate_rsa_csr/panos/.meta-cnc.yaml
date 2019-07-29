@@ -1,0 +1,59 @@
+name: generate_rsa_csr
+label: 3C. Generate and export RSA CSR for external signing
+
+description: 
+  Generate CSR and export pkcs10
+
+type: python3
+
+extends:
+
+labels:
+  collection:  
+    - Authentication Policy
+    - X509
+    
+variables:
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: ip_address
+  - name: api_key
+    description: API Key
+    default: abc123
+    type_hint: text
+  - name: CERT_NAME
+    description: Certificate Label
+    default: Authentication Portal
+    type_hint: text 
+  - name: CERT_HOSTNAME
+    description: FQDN for certficate
+    default: auth.customer.com
+    type_hint: text  
+  - name: CERT_NBITS
+    description: Certificate Bits
+    default: 2048
+    type_hint: dropdown
+    dd_list:
+      - key: 2048
+        value: 2048
+      - key: 3072
+        value: 3072
+      - key: 4096
+        value: 4096
+  - name: CERT_DIGEST
+    description: Certificate Digest
+    default: SHA512
+    type_hint: dropdown
+    dd_list:
+      - key: SHA256
+        value: SHA256
+      - key: SHA384
+        value: SHA384
+      - key: SHA512
+        value: SHA512     
+   
+
+snippets:
+  - name: rsa_csr_gen_export
+    file: rsa_csr.py

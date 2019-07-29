@@ -1,0 +1,72 @@
+name: configure_auth_policy_api_90
+label: 6B. Configure Sample Authentication Policy - PAN-OS 9.0
+
+description: |
+  Add Custom URL Category, Authentication Object and Sample Authentication Policy
+
+type: rest
+
+extends:
+
+labels:
+  collection:  
+    - Authentication Policy
+
+variables:
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: ip_address
+  - name: api_key
+    description: API Key
+    default: abc123
+    type_hint: text
+  - name: auth_obj_name
+    description: Authentication Object Name (will be created/replaced)
+    default: Sample Auth Object - Skillet
+    type_hint: text
+  - name: auth_profile
+    description: MFA Enabled Authentication Profile (must exist)
+    default: Your Auth Profile Here
+    type_hint: text
+  - name: auth_policy_name
+    description: authentication policy name  ( will be created/replaced )
+    default: Example Auth Policy - Skillet
+    type_hint: text
+  - name: reauth_time
+    description: MFA Reauthentication Interval in minutes
+    default: 5
+    type_hint: number
+  - name: source_zone
+    description: Source Zone (must exist)
+    default: trust
+    type_hint: text
+  - name: dest_zone
+    description: Destination Zone (must exist)
+    default: untrust
+    type_hint: text
+  - name: test_site
+    description: Hostname for MFA test
+    default: example.org
+    type_hint: text
+
+
+snippets:
+  - name: auth_object
+    path: https://{{ TARGET_IP }}/api?key={{ api_key }}&type=config&action=set&xpath=/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/authentication-object/entry[@name='{{ auth_obj_name }}']&element=<message>Additional Authentication is required to access this resource.</message><authentication-profile>{{ auth_profile }}</authentication-profile><authentication-method>web-form</authentication-method>
+    output_type: xml
+    outputs:
+      - name: result
+        capture_pattern: result
+  - name: custom_url_category
+    path: https://{{ TARGET_IP }}/api?key={{ api_key }}&type=config&action=set&xpath=/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/profiles/custom-url-category/entry[@name='Destinations to MFA - Skillet']&element=<list><member>{{ test_site }}</member></list><type>URL List</type>
+    output_type: xml
+    outputs:
+      - name: result
+        capture_pattern: result
+  - name: add_auth_policy
+    path: https://{{ TARGET_IP }}/api?key={{ api_key }}&type=config&action=set&xpath=/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/authentication/rules/entry[@name='{{ auth_policy_name }}']&element=<from><member>{{ source_zone }}</member></from><to><member>{{ dest_zone }}</member></to><source><member>any</member></source><destination><member>any</member></destination><source-user><member>any</member></source-user><service><member>service-http</member></service><hip-profiles><member>any</member></hip-profiles><authentication-enforcement>{{ auth_obj_name }}</authentication-enforcement><log-authentication-timeout>yes</log-authentication-timeout><category><member>Destinations to MFA - Skillet</member></category><timeout>{{ reauth_time }}</timeout><disabled>yes</disabled>
+    output_type: xml
+    outputs:
+      - name: result
+        capture_pattern: result

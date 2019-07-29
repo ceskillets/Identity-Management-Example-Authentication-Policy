@@ -1,0 +1,48 @@
+name: create_okta_mfa_profile
+label: 4B. Create Okta MFA Server Profile
+
+description: |
+  Import CA certs for Okta service, create cert profile, Okta MFA server profile, and local Auth Profile with MFA
+
+type: python3
+
+extends:
+
+labels:
+  collection:  Authentication Policy
+
+variables:
+  - name: TARGET_IP
+    description: Host
+    default: 127.0.0.1
+    type_hint: ip_address
+  - name: api_key
+    description: API Key
+    default: abc123
+    type_hint: text
+  - name: mfa_profile_name
+    description: MFA Profile Name (will be created/replaced)
+    default: OKTA_MFA_Skillet
+    type_hint: text
+  - name: auth_profile
+    description: Example Local Auth Profile with MFA enabled (will be created/replaced)
+    default: Local Auth OKTA MFA
+    type_hint: text
+  - name: okta_endpoint
+    description: Your OKTA API Instance
+    default: yourcompany.okta.com
+    type_hint: text
+  - name: okta_token
+    description: Okta API Token
+    default: XXXXXXXX
+    type_hint: password
+  - name: okta_org
+    description: Your Okta Company Name
+    default: From Okta Admin Panel
+    type_hint: text
+
+snippets:
+  - name: configure_okta_mfa
+    file: okta_mfa_config.py
+
+    
