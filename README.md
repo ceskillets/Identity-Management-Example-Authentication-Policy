@@ -36,10 +36,10 @@ Depending on the current state of your environment, all skillets may not apply.
 - If you alread have the authentication portal configured, you make skip this step
 - If you have generated a CA in step 2 or have an existing on box CA, use 3A or 3B to generate a certificate using that CA
 - If you would like to generate a certificate signing request for an external CA use 3C
-  - The CSR will be stored in the ~/.pan_cnc/panhandler/repositories/Identity Skillets/working directory
+  - The CSR will be stored in the ~/.pan_cnc/panhandler/repositories/Identity-Management-Example-Authentication-Policy/working directory
   - After signing the CSR with the external CA, place the certificate PEM file in the same directory and execute 3D to import the certificate
 - If you have a pkcs12 file from an external CA that you would like to import, use 3E
- - Place your pkcs12 file in the ~/.pan_cnc/panhandler/repositories/Identity Skillets/working directory
+ - Place your pkcs12 file in the ~/.pan_cnc/panhandler/repositories/Identity-Management-Example-Authentication-Policy/working directory
 4. Create a MFA Server profile
  - Execute either 4A or 4B to create the MFA server profile and required components for subsequent use in the Authentication Policy
  - A local auth profile will be created to allow completion of the workflow. Depending on the MFA provider in use, you may need to add additional authentication resources and reconfigure the skeleton objects. 
